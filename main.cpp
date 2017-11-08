@@ -9,10 +9,12 @@ using namespace std;
 struct cache{
     int size;
     int mode; // mode: FIFO=0, RAND=1
+    int missCount;
+    int hitCount;
     deque<int> items; // each element is an int representing an item from population
 
     cache(int m, int mode)
-            : size(m), mode(mode)
+            : size(m), mode(mode), missCount(0), hitCount(0)
     {}
 
     void fillCache(){
@@ -27,6 +29,12 @@ struct cache{
         }
         cout << "----------" << endl;
     }
+    int getMissCount(){
+        return missCount;
+    }
+    int getHitCount(){
+        return hitCount;
+    }
 
     void request(int itemIndex){
         deque<int>::iterator it = find(items.begin(), items.end(), itemIndex);
@@ -40,9 +48,11 @@ struct cache{
                 items[randNum] = itemIndex;
             }
             cout << "MISS: " << itemIndex << endl;
+            missCount++;
         }
         else{
             cout << "HIT: " << itemIndex << endl;
+            hitCount++;
         }
     }
 };
@@ -69,9 +79,10 @@ int timeStep(double &time, map<double, int> &que, cache &cache){
 }
 
 int main() {
-    srand(time(NULL));
+    srand(time(NULL)); // seed rand()
 
     double gTime = 0;
+    int missNum = 0;
 
     int n;
     int m;
@@ -93,6 +104,12 @@ int main() {
         timeStep(gTime, q, simCache);
     }
     simCache.printCache(); // cache after sim
+
+    cout << "Final Time: " << gTime << endl;
+    cout << "Hit Count: " << simCache.getHitCount() << endl;
+    cout << "Miss Count: " << simCache.getMissCount() << endl;
+    cout << "Hit Rate: " << simCache.getHitCount()/gTime << endl;
+    cout << "Miss Rate: " << simCache.getMissCount()/gTime << endl;
 
     return 0;
 }
