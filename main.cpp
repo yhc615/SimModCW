@@ -8,10 +8,11 @@ using namespace std;
 
 struct cache{
     int size;
+    int mode; // mode: FIFO=0, RAND=1
     deque<int> items; // each element is an int representing an item from population
 
-    cache(int m)
-            : size(m)
+    cache(int m, int mode)
+            : size(m), mode(mode)
     {}
 
     void fillCache(){
@@ -27,7 +28,7 @@ struct cache{
         cout << "----------" << endl;
     }
 
-    void request(int itemIndex, int mode){ // mode: FIFO=0, RAND=1
+    void request(int itemIndex){
         deque<int>::iterator it = find(items.begin(), items.end(), itemIndex);
         if(it == items.end()){
             if(mode==0){
@@ -35,7 +36,7 @@ struct cache{
                 items.push_back(itemIndex);
             }
             if(mode==1){
-                int randNum = rand()*size/RAND_MAX;
+                int randNum = (double)rand()*size/RAND_MAX;
                 items[randNum] = itemIndex;
             }
             cout << "MISS: " << itemIndex << endl;
@@ -53,7 +54,7 @@ double nextRequestTime(double lambda){
 
 int processQueue(double &time, map<double, int> &que, cache &cache){
     int itemIndex = que.begin()->second;
-    cache.request(itemIndex, 0); // FIFO=0
+    cache.request(itemIndex); // FIFO=0
     que.erase(que.begin());
     que.insert(pair<double,int>(time+nextRequestTime(itemIndex),itemIndex));
     return 0;
@@ -75,11 +76,12 @@ int main() {
     int n;
     int m;
     int tSteps;
-    cout << "Enter item size, cache size, time steps:" << endl;
-    cin >> n >> m >> tSteps;
+    int mode;
+    cout << "Enter item size, cache size, time steps, mode(FIFO:0, RAND:1):" << endl;
+    cin >> n >> m >> tSteps >> mode;
 
     map<double, int> q;
-    cache simCache(m);
+    cache simCache(m, mode);
 
     simCache.fillCache();
     for(int i=1; i<=n; i++){
