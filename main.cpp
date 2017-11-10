@@ -3,7 +3,6 @@
 #include <random>
 #include <map>
 #include <time.h>
-
 #include "cache.hpp"
 
 using namespace std;
@@ -24,7 +23,7 @@ int processQueue(double &time, map<double, int> &que, Cache &cache){
 int timeStep(double &time, map<double, int> &que, Cache &cache){
     double eventTime = que.begin()->first;
     time = eventTime;
-    cout << "TIME: " << time << endl;
+    //cout << "TIME: " << time << endl;
     processQueue(time, que, cache);
     return 0;
 } 

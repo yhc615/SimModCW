@@ -10,8 +10,9 @@ class Cache{
 public:
 	Cache(int m, int policy)
             : size(m), replacement_policy(policy), missCount(0), hitCount(0)
-    {std::cout<<"created Cache of capacity: "<<m<<std::endl;
-	 std::cout<<"Replacement Policy: "<<replacement_policy<<std::endl;}
+    {//std::cout<<"created Cache of capacity: "<<m<<std::endl;
+	 //std::cout<<"Replacement Policy: "<<replacement_policy<<std::endl;
+    }
 
     //Methods
     void fill(){
@@ -38,11 +39,11 @@ public:
                 int randNum = (double)rand()*size/RAND_MAX;
                 items[randNum] = itemIndex;
             }
-            std::cout << "MISS: " << itemIndex << std::endl;
+            //std::cout << "MISS: " << itemIndex << std::endl;
             missCount++;
         }
         else{
-            std::cout << "HIT: " << itemIndex << std::endl;
+            //std::cout << "HIT: " << itemIndex << std::endl;
             hitCount++;
         }
     }
